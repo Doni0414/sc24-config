@@ -1,0 +1,58 @@
+selmag:
+  services:
+    catalogue:
+      url: lb://selmag-catalogue-service
+    feedback:
+      url: lb://selmag-feedback-service
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8082/realms/selmag
+      client:
+        registration:
+          keycloak:
+            client-id: customer-app
+            client-secret: l89iNgcKTw0OI7hYQZFPLHPFwgdzuFUB
+            scope:
+              - openid
+              - view_catalogue
+          metrics:
+            provider: keycloak
+            client-id: customer-app-metrics-client
+            client-secret: PoKcFg47LTrV3SRcuxoFhxmMX2fItris
+            authorization-grant-type: client_credentials
+            scope:
+              - metrics_server
+          discovery:
+            provider: keycloak
+            client-id: customer-app
+            client-secret: l89iNgcKTw0OI7hYQZFPLHPFwgdzuFUB
+            authorization-grant-type: client_credentials
+            scope:
+              - discovery
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8082/realms/selmag
+            user-name-attribute: preferred_username
+  boot:
+    admin:
+      client:
+        enabled: false
+management:
+  health:
+    readinessstate:
+      enabled: true
+    livenessstate:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true

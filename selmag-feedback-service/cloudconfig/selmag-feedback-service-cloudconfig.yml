@@ -1,0 +1,54 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/feedback
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8082/realms/selmag
+      client:
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8082/realms/selmag
+        registration:
+          keycloak:
+            client-id: feedback-service-metrics-client
+            client-secret: GpMB4c4bkDwa1b6GRgFq1ObnwtwclUiA
+            authorization-grant-type: client_credentials
+            scope:
+              - metrics_server
+          discovery:
+            provider: keycloak
+            client-id: feedback-service
+            client-secret: YrZEGRB0dCyU8RhYM3l22Mphw85hNj3N
+            authorization-grant-type: client_credentials
+            scope:
+              - discovery
+  boot:
+    admin:
+      client:
+        enabled: false
+springdoc:
+  swagger-ui:
+    oauth:
+      client-id: feedback-service-swagger-ui
+      use-pkce-with-authorization-code-grant: true
+keycloak:
+  uri: http://localhost:8082
+management:
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
